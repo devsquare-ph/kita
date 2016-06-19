@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Kita</string>
+    <string name="drawer_item_pos">POS</string>
+    <string name="drawer_item_inventory">INVENTORY</string>
+</resources>
