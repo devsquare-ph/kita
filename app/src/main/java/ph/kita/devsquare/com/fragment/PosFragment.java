@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +22,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import ph.kita.devsquare.com.adapters.PosAdapter;
 import ph.kita.devsquare.com.adapters.PosItemAutoCompleteAdapter;
 import ph.kita.devsquare.com.kita.R;
@@ -42,6 +45,8 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
     ListView list;
     @BindView(R.id.totalPrice)
     TextView totalPrice;
+    @BindView(R.id.checkOut)
+    Button checkOut;
 
     private List<Item> itemCarts = new ArrayList<>();
 
@@ -92,7 +97,7 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
     public interface OnFragmentPOSListener {
 
         public void onCart(Item item);
-
+        public void onCheckOut(ArrayList<Item> items);
     }
 
     @Override
@@ -143,4 +148,11 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
         onFragmentPOSListener.onCart(item);
 
     }
+
+    @OnClick(R.id.checkOut)
+    public void checkOut(){
+        Toast.makeText(getActivity(), "check out", Toast.LENGTH_SHORT).show();
+        onFragmentPOSListener.onCheckOut(new ArrayList<Item>(itemCarts));
+    }
+
 }

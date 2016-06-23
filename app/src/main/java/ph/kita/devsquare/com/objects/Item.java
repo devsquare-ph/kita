@@ -1,11 +1,14 @@
 package ph.kita.devsquare.com.objects;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
  * Created by abnonymous on 6/22/16.
  */
-public class Item {
+public class Item implements Parcelable{
 
     private int id;
     private String name;
@@ -28,6 +31,28 @@ public class Item {
         this.imageURL = imageURL;
         this.dateCreated = dateCreated;
     }
+
+    protected Item(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        price = in.readFloat();
+        tag = in.readString();
+        stock = in.readFloat();
+        qualitytNWeight = in.readFloat();
+        imageURL = in.readString();
+    }
+
+    public static final Creator<Item> CREATOR = new Creator<Item>() {
+        @Override
+        public Item createFromParcel(Parcel in) {
+            return new Item(in);
+        }
+
+        @Override
+        public Item[] newArray(int size) {
+            return new Item[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -102,4 +127,21 @@ public class Item {
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(name);
+        parcel.writeFloat(price);
+        parcel.writeString(tag);
+        parcel.writeFloat(stock);
+        parcel.writeFloat(qualitytNWeight);
+        parcel.writeString(imageURL);
+    }
+
 }

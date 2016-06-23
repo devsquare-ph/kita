@@ -15,10 +15,12 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import ph.kita.devsquare.com.fragment.InventoryFragment;
 import ph.kita.devsquare.com.fragment.PosCartFragment;
 import ph.kita.devsquare.com.fragment.PosFragment;
+import ph.kita.devsquare.com.fragment.PosReceiptFragment;
 import ph.kita.devsquare.com.objects.Item;
 import ph.kita.devsquare.com.utils.Constant;
 
@@ -104,6 +106,19 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
             Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    @Override
+    public void onCheckOut(ArrayList<Item> items) {
+        Log.d(TAG, "onCheckOut");
+            Fragment fragment = PosReceiptFragment.newInstance(items);
+            if (fragment != null) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main, fragment, PosReceiptFragment.class.getSimpleName());
+                fragmentTransaction.addToBackStack(PosReceiptFragment.class.getSimpleName());
+                fragmentTransaction.commit();
+            }
     }
 
     @Override
