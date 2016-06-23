@@ -37,7 +37,7 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragment = new PosFragment();
-            fragmentTransaction.replace(R.id.main, fragment);
+            fragmentTransaction.replace(R.id.main, fragment, PosFragment.class.getSimpleName());
             fragmentTransaction.commit();
         }
 
@@ -60,21 +60,23 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
                         Log.d(TAG, "POSITION " + position);
 
                         Fragment fragment = new Fragment();
-
+                        String tagFragment = "";
                         switch (position) {
 
                             case Constant.DRAWER_POS:
                                 fragment = new PosFragment();
+                                tagFragment = PosFragment.class.getSimpleName();
                                 break;
                             case Constant.DRAWER_INVENTORY:
                                 fragment = new InventoryFragment();
+                                tagFragment = InventoryFragment.class.getSimpleName();
                                 break;
                         }
 
                         if (fragment != null) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.main, fragment);
+                            fragmentTransaction.replace(R.id.main, fragment, tagFragment);
                             fragmentTransaction.commit();
                         }
 
@@ -94,7 +96,7 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
             if (fragment != null) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.main, fragment);
+                fragmentTransaction.replace(R.id.main, fragment, PosCartFragment.class.getSimpleName());
                 fragmentTransaction.addToBackStack(PosCartFragment.class.getSimpleName());
                 fragmentTransaction.commit();
             }
@@ -105,8 +107,15 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
     }
 
     @Override
-    public void onAddToCart(Item item) {
+    public void onAddToCart(final Item item) {
         Log.d(TAG, "price: " + item.getPrice());
         Toast.makeText(this,"addToCart",Toast.LENGTH_SHORT).show();
+
+        PosFragment posCartFragment = (PosFragment) getSupportFragmentManager().findFragmentByTag(PosFragment.class.getSimpleName());
+
+        posCartFragment.addPosCart(item);
+
+        getSupportFragmentManager().popBackStack();
+
     }
 }

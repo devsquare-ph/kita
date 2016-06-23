@@ -128,7 +128,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="8"
-            android:text="item_price" />
+            android:text="item_price"
+            android:inputType="numberDecimal"/>
 
     </LinearLayout>
 
@@ -176,8 +177,8 @@
                 android:id="@+id/qtNwt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Input Quantity"
-
+                android:hint="Input Quantity/Weight"
+                android:inputType="numberDecimal"
                 />
         </LinearLayout>
 

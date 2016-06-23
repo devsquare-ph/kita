@@ -89,7 +89,7 @@ public class PosItemAutoCompleteAdapter extends BaseAdapter implements Filterabl
             @Override
             public CharSequence convertResultToString(Object resultValue) {
 //                return super.convertResultToString(resultValue);
-                return ((Item) resultValue).getName();
+                return "";
             }
 
             @Override
