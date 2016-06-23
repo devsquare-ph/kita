@@ -4,22 +4,25 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import java.io.IOException;
+
 import ph.kita.devsquare.com.fragment.InventoryFragment;
+import ph.kita.devsquare.com.fragment.PosCartFragment;
 import ph.kita.devsquare.com.fragment.PosFragment;
+import ph.kita.devsquare.com.objects.Item;
 import ph.kita.devsquare.com.utils.Constant;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements PosFragment.OnFragmentPOSListener, PosCartFragment.OnFragmentPOSCartListener{
 
     private String TAG = getClass().getSimpleName();
 
@@ -27,7 +30,7 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Log.d(TAG,"onCreate MainACtivtiy");
          /*Set the Home Fragment*/
         Fragment fragment = new Fragment();
         if (fragment != null) {
@@ -81,5 +84,29 @@ public class MainActivity extends FragmentActivity {
                 .build();
 
 
+    }
+
+    @Override
+    public void onCart(Item item) {
+        Log.d(TAG, "onCart");
+        try {
+            Fragment fragment = PosCartFragment.newInstance(item.getId(), item.getName(), item.getPrice(), item.getImageURL(), item.getQualitytNWeight(), item.getTag(), item.getStock());
+            if (fragment != null) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main, fragment);
+                fragmentTransaction.addToBackStack(PosCartFragment.class.getSimpleName());
+                fragmentTransaction.commit();
+            }
+        } catch (IOException e) {
+            Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    public void onAddToCart(Item item) {
+        Log.d(TAG, "price: " + item.getPrice());
+        Toast.makeText(this,"addToCart",Toast.LENGTH_SHORT).show();
     }
 }
