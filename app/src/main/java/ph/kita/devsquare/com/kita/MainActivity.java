@@ -18,13 +18,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import ph.kita.devsquare.com.fragment.InventoryFragment;
+import ph.kita.devsquare.com.fragment.InventoryItemFragment;
 import ph.kita.devsquare.com.fragment.PosCartFragment;
 import ph.kita.devsquare.com.fragment.PosFragment;
 import ph.kita.devsquare.com.fragment.PosReceiptFragment;
 import ph.kita.devsquare.com.objects.Item;
 import ph.kita.devsquare.com.utils.Constant;
 
-public class MainActivity extends FragmentActivity implements PosFragment.OnFragmentPOSListener, PosCartFragment.OnFragmentPOSCartListener{
+public class MainActivity extends FragmentActivity implements PosFragment.OnFragmentPOSListener, PosCartFragment.OnFragmentPOSCartListener, InventoryFragment.OnFragmentInventoryListener, InventoryItemFragment.OnFragmentInventoryItemListener {
 
     private String TAG = getClass().getSimpleName();
 
@@ -132,5 +133,26 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
 
         getSupportFragmentManager().popBackStack();
 
+    }
+
+    @Override
+    public void onAddItem() {
+        Log.d(TAG, "onCheckOut");
+        Fragment fragment = InventoryItemFragment.newInstance();
+        if (fragment != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.main, fragment, InventoryItemFragment.class.getSimpleName());
+            fragmentTransaction.addToBackStack(InventoryItemFragment.class.getSimpleName());
+            fragmentTransaction.commit();
+        }
+    }
+
+    @Override
+    public void onSaveItem(Item item) {
+        PosFragment.dumyPOSItems.add(item);
+
+        Toast.makeText(this,"itemsize: " + PosFragment.dumyPOSItems.size(), Toast.LENGTH_SHORT).show();
+        getSupportFragmentManager().popBackStack();
     }
 }
