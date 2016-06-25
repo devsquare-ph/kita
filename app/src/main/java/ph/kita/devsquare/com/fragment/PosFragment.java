@@ -151,8 +151,14 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
 
     @OnClick(R.id.checkOut)
     public void checkOut(){
-        Toast.makeText(getActivity(), "check out", Toast.LENGTH_SHORT).show();
-        onFragmentPOSListener.onCheckOut(new ArrayList<Item>(itemCarts));
+
+        //validation for purchasing item
+        if(itemCarts.size() > 0) {
+            Toast.makeText(getActivity(), "check out", Toast.LENGTH_SHORT).show();
+            onFragmentPOSListener.onCheckOut(new ArrayList<Item>(itemCarts));
+        }{
+            Toast.makeText(getActivity(), "Please Add Item", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void clear(){

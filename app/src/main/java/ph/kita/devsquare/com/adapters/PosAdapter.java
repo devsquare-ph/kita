@@ -89,7 +89,7 @@ public class PosAdapter extends BaseAdapter{
             @Override
             public void onClick(View view) {
                 //closed item
-                ConfirmationDialog confirmationDialog = ConfirmationDialog.newInstance("Are you sure to remove");
+                ConfirmationDialog confirmationDialog = ConfirmationDialog.newInstance("Are you sure to remove?");
 
                 confirmationDialog.setOnListener(new ConfirmationDialog.OnDialogConfirmationListener() {
                     @Override
