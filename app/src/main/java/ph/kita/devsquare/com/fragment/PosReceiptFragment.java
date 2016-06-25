@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,6 +16,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import ph.kita.devsquare.com.adapters.PosReceiptAdapter;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
@@ -33,13 +33,15 @@ public class PosReceiptFragment extends Fragment{
     @BindView(R.id.totalPrice)
     TextView totalPrice;
 
-//    private OnFragmentPOSListener onFragmentPOSListener;
-//
-//    public interface OnFragmentPOSListener {
-//
-//        public void onCart(Item item);
-//
-//    }
+    private OnFragmentReceiptListener onFragmentReceiptListener;
+    private List<Item> items;
+
+
+    public interface OnFragmentReceiptListener {
+
+        public void onSave(List<Item> item);
+
+    }
 
     static final String ITEMS = "ITEMS";
 
@@ -56,10 +58,10 @@ public class PosReceiptFragment extends Fragment{
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.d(TAG, "onAttach");
-//        if(context instanceof  Activity && context instanceof OnFragmentPOSListener){
-//            Log.d(TAG,"OnFragmentPOSListener");
-//            onFragmentPOSListener = (OnFragmentPOSListener) context;
-//        }
+        if(context instanceof OnFragmentReceiptListener){
+            Log.d(TAG,"OnFragmentPOSListener");
+            onFragmentReceiptListener = (OnFragmentReceiptListener) context;
+        }
 
     }
 
@@ -70,7 +72,7 @@ public class PosReceiptFragment extends Fragment{
         Log.d(TAG, "onCreateView");
         ButterKnife.bind(this, view);
 
-        List<Item> items = getArguments().getParcelableArrayList(ITEMS);
+        items = getArguments().getParcelableArrayList(ITEMS);
         Log.d(TAG, "items size: " + items.size());
 
         list.setAdapter(new PosReceiptAdapter(getActivity(), items));
@@ -86,6 +88,11 @@ public class PosReceiptFragment extends Fragment{
         totalPrice.setText("" + totalPrices);
 
         return view;
+    }
+
+    @OnClick(R.id.ok)
+    public void ok(){
+        onFragmentReceiptListener.onSave(items);
     }
 
 }

@@ -155,4 +155,10 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
         onFragmentPOSListener.onCheckOut(new ArrayList<Item>(itemCarts));
     }
 
+    public void clear(){
+        itemCarts.clear();
+        PosAdapter posAdapter = (PosAdapter) list.getAdapter();
+        posAdapter.notifyDataSetChanged();
+    }
+
 }

@@ -3,6 +3,8 @@ package ph.kita.devsquare.com.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ph.kita.devsquare.com.dialog.ConfirmationDialog;
 import ph.kita.devsquare.com.fragment.PosFragment;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
@@ -86,9 +89,17 @@ public class PosAdapter extends BaseAdapter{
             @Override
             public void onClick(View view) {
                 //closed item
+                ConfirmationDialog confirmationDialog = ConfirmationDialog.newInstance("Are you sure to remove");
 
-                items.remove(position);
-                notifyDataSetChanged();
+                confirmationDialog.setOnListener(new ConfirmationDialog.OnDialogConfirmationListener() {
+                    @Override
+                    public void onOK() {
+                        items.remove(position);
+                        notifyDataSetChanged();
+                    }
+                });
+
+                confirmationDialog.show(((FragmentActivity)mContext).getSupportFragmentManager(), ConfirmationDialog.class.getSimpleName());
 
             }
         });

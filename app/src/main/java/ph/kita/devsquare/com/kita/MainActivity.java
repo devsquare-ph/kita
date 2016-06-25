@@ -16,6 +16,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import ph.kita.devsquare.com.fragment.InventoryFragment;
 import ph.kita.devsquare.com.fragment.InventoryItemFragment;
@@ -25,7 +26,7 @@ import ph.kita.devsquare.com.fragment.PosReceiptFragment;
 import ph.kita.devsquare.com.objects.Item;
 import ph.kita.devsquare.com.utils.Constant;
 
-public class MainActivity extends FragmentActivity implements PosFragment.OnFragmentPOSListener, PosCartFragment.OnFragmentPOSCartListener, InventoryFragment.OnFragmentInventoryListener, InventoryItemFragment.OnFragmentInventoryItemListener {
+public class MainActivity extends FragmentActivity implements PosFragment.OnFragmentPOSListener, PosCartFragment.OnFragmentPOSCartListener, InventoryFragment.OnFragmentInventoryListener, InventoryItemFragment.OnFragmentInventoryItemListener, PosReceiptFragment.OnFragmentReceiptListener {
 
     private String TAG = getClass().getSimpleName();
 
@@ -153,6 +154,14 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
         PosFragment.dumyPOSItems.add(item);
 
         Toast.makeText(this,"itemsize: " + PosFragment.dumyPOSItems.size(), Toast.LENGTH_SHORT).show();
+        getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void onSave(List<Item> item) {
+        Toast.makeText(this, "save purchase items", Toast.LENGTH_SHORT).show();
+        PosFragment posFragment = (PosFragment) getSupportFragmentManager().findFragmentByTag(PosFragment.class.getSimpleName());
+        posFragment.clear();
         getSupportFragmentManager().popBackStack();
     }
 }
