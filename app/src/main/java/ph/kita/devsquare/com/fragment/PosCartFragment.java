@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,8 +34,8 @@ public class PosCartFragment extends Fragment{
 
     private static final String TAG = PosCartFragment.class.getSimpleName();
 
-    @BindView(R.id.tag)
-    TextView tag;
+//    @BindView(R.id.tag)
+//    TextView tag;
     @BindView(R.id.name)
     TextView name;
     @BindView(R.id.stock)
@@ -50,6 +52,8 @@ public class PosCartFragment extends Fragment{
     Button decrement;
     @BindView(R.id.addCart)
     Button addCart;
+//    @BindView(R.id.checkOut)
+//    Button checkOut;
 
     static final String ID = "ID";
     static final String NAME = "NAME";
@@ -61,6 +65,8 @@ public class PosCartFragment extends Fragment{
 
     private Item item;
     private OnFragmentPOSCartListener onFragmentPOSCartListener;
+    //remove checkout feature
+//    private PosFragment.OnFragmentPOSListener onFragmentPOSListener;
 
     public interface OnFragmentPOSCartListener{
         public void onAddToCart(Item item);
@@ -94,6 +100,12 @@ public class PosCartFragment extends Fragment{
             onFragmentPOSCartListener = (OnFragmentPOSCartListener) context;
         }
 
+        //remove checkout
+//        if(context instanceof  Activity && context instanceof PosFragment.OnFragmentPOSListener){
+//            Log.d(TAG,"OnFragmentPOSListener");
+//            onFragmentPOSListener = (PosFragment.OnFragmentPOSListener) context;
+//        }
+
     }
 
     @Nullable
@@ -106,7 +118,7 @@ public class PosCartFragment extends Fragment{
         if(item == null)
         item = new Item(getArguments().getInt(ID), getArguments().getString(NAME),getArguments().getFloat(PRICE),getArguments().getString(ITEM_TAG), getArguments().getFloat(STOCK), getArguments().getFloat(QTNWT), getArguments().getString(IMGURL),null);
 
-        tag.setText(item.getTag());
+//        tag.setText(item.getTag());
         name.setText(item.getName());
         price.setText("" + item.getPrice());
         qtNwt.setText("" + item.getQualitytNWeight());
@@ -145,8 +157,34 @@ public class PosCartFragment extends Fragment{
     @OnClick(R.id.addCart)
     public void addCart() {
 //        Toast.makeText(getActivity(),"addCart",Toast.LENGTH_SHORT).show();
-        this.item.setPrice(Float.valueOf(this.price.getText().toString()));
-        this.onFragmentPOSCartListener.onAddToCart(item);
+
+        float price = Float.valueOf(this.price.getText().toString());
+        float qnttyNwght = Float.valueOf(this.qtNwt.getText().toString());
+
+        if(price > 0 && qnttyNwght > 0) {
+            this.item.setPrice(Float.valueOf(this.price.getText().toString()));
+            this.onFragmentPOSCartListener.onAddToCart(item);
+        }else{
+            Toast.makeText(getActivity(), "Price and Quantity cannot be empty.", Toast.LENGTH_SHORT).show();
+        }
     }
+
+    //remove checkout
+//    @OnClick(R.id.checkOut)
+//    public void checkOut() {
+//        this.item.setPrice(Float.valueOf(this.price.getText().toString()));
+//
+//        float price = Float.valueOf(this.price.getText().toString());
+//        float qnttyNwght = Float.valueOf(this.qtNwt.getText().toString());
+//
+//        if(price > 0 && qnttyNwght > 0) {
+//            Toast.makeText(getActivity(), "check out", Toast.LENGTH_SHORT).show();
+//            getActivity().getSupportFragmentManager().popBackStack();
+//            onFragmentPOSListener.onCheckOut(new ArrayList<Item>(Arrays.asList(item)));
+//        }else{
+//            Toast.makeText(getActivity(), "Price and Quantity cannot be empty.", Toast.LENGTH_SHORT).show();
+//        }
+//
+//    }
 
 }

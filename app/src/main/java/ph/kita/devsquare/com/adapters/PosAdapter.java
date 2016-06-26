@@ -39,6 +39,13 @@ public class PosAdapter extends BaseAdapter{
     private Context mContext;
 //    private List<Item> items = new ArrayList<Item>();
     private List<Item> items;
+
+    private OnPosAdapterListener onPosAdapterListener;
+
+    public interface OnPosAdapterListener{
+        public void refresh();
+    }
+
     public PosAdapter(Context context)
     {
         mContext = context;
@@ -46,11 +53,12 @@ public class PosAdapter extends BaseAdapter{
 //        this.items = PosFragment.dumyPOSItems;
     }
 
-    public PosAdapter(Context context, List<Item> items)
+    public PosAdapter(Context context, List<Item> items, OnPosAdapterListener onPosAdapterListener)
     {
         mContext = context;
         this.items = items;
 //        this.items = PosFragment.dumyPOSItems;
+        this.onPosAdapterListener = onPosAdapterListener;
     }
 
     @Override
@@ -100,6 +108,7 @@ public class PosAdapter extends BaseAdapter{
                     public void onOK() {
                         items.remove(position);
                         notifyDataSetChanged();
+                        onPosAdapterListener.refresh();
                     }
                 });
 
@@ -123,30 +132,30 @@ public class PosAdapter extends BaseAdapter{
         }
     }
 
-    public void addItem(final Item item) {
-
-//        items.add(item);
-//        items.addAll(new ArrayList<Item>(Arrays.asList(item)));
-
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-
-                if(getCount() == 0)
-                items = new ArrayList<Item>();
-
-                items.add(item);
-                notifyDataSetChanged();
-
-                return null;
-            }
-        }.execute();
-
-
-        Log.d(TAG, "Add Item: " + item.getName());
-        Log.d(TAG, "Items size: " + items.size());
-
-    }
+//    public void addItem(final Item item) {
+//
+////        items.add(item);
+////        items.addAll(new ArrayList<Item>(Arrays.asList(item)));
+//
+//        new AsyncTask<Void, Void, Void>() {
+//            @Override
+//            protected Void doInBackground(Void... voids) {
+//
+//                if(getCount() == 0)
+//                items = new ArrayList<Item>();
+//
+//                items.add(item);
+//                notifyDataSetChanged();
+//
+//                return null;
+//            }
+//        }.execute();
+//
+//
+//        Log.d(TAG, "Add Item: " + item.getName());
+//        Log.d(TAG, "Items size: " + items.size());
+//
+//    }
 
     public void addItems(final List<Item> items) {
 

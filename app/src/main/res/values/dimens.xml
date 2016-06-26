@@ -7,5 +7,6 @@
 
     <!-- scale-independent fixels -->
     <dimen name="sp_twenty_five">25sp</dimen>
+    <dimen name="sp_thirty">30sp</dimen>
 
 </resources>

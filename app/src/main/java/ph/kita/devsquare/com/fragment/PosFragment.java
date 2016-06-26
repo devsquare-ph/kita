@@ -29,6 +29,8 @@ import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
 import ph.kita.devsquare.com.utils.Utility;
 
+import static ph.kita.devsquare.com.adapters.PosAdapter.*;
+
 /**
  * Created by jericcabana on 19/06/2016.
  */
@@ -52,8 +54,6 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
 
     public void addPosCart(Item item){
 
-        PosAdapter posAdapter = (PosAdapter) list.getAdapter();
-
         //check duplicate data in itemCarts
         int i;
         for(i = 0; i < itemCarts.size(); i++){
@@ -70,6 +70,14 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
         if(itemCarts.size() == i) {
             itemCarts.add(item);
         }
+
+        setTotalPrice();
+
+    }
+
+    private void setTotalPrice() {
+
+        PosAdapter posAdapter = (PosAdapter) list.getAdapter();
 
         //set totalprice
         float totalPrices = 0.0f;
@@ -95,10 +103,11 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
     private OnFragmentPOSListener onFragmentPOSListener;
 
     public interface OnFragmentPOSListener {
-
         public void onCart(Item item);
         public void onCheckOut(ArrayList<Item> items);
     }
+
+
 
     @Override
     public void onAttach(Context context) {
@@ -122,7 +131,13 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
         itemAutoComplete.setAdapter(posAdapter);
         itemAutoComplete.setOnItemClickListener(this);
 
-        list.setAdapter(new PosAdapter(getActivity(), itemCarts));
+        list.setAdapter(new PosAdapter(getActivity(), itemCarts, new OnPosAdapterListener() {
+            @Override
+            public void refresh() {
+                setTotalPrice();
+            }
+        }));
+
         list.setEmptyView(view.findViewById(R.id.empty));
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
