@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import butterknife.BindView;
@@ -22,6 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
+import ph.kita.devsquare.com.utils.Utility;
 
 /**
  * Created by jericcabana on 19/06/2016.
@@ -65,8 +67,9 @@ public class PosCartFragment extends Fragment{
     }
 
     public static Fragment newInstance(int id, String name, float price, String imgUrl, float qtNwt, String tag, float stock) throws IOException{
-
-        if(name != null && imgUrl != null && tag != null)
+        Log.d(TAG, "name: " + name);
+        Log.d(TAG, "tag: " + tag);
+        if(name == null && tag == null)
             throw new IOException("Input cannot be null");
 
         PosCartFragment posCart = new PosCartFragment();
@@ -108,6 +111,7 @@ public class PosCartFragment extends Fragment{
         price.setText("" + item.getPrice());
         qtNwt.setText("" + item.getQualitytNWeight());
         stock.setText("" + item.getStock());
+        Utility.setImage(item.getImageURL(), img, getActivity());
 
         return view;
     }

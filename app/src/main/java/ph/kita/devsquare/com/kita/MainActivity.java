@@ -35,6 +35,7 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG,"onCreate MainACtivtiy");
+        Log.d(TAG,"onCreate getFileDir: " + getFilesDir());
          /*Set the Home Fragment*/
         Fragment fragment = new Fragment();
         if (fragment != null) {

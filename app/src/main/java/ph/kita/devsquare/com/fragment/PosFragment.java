@@ -35,8 +35,8 @@ import ph.kita.devsquare.com.utils.Utility;
 public class PosFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     private static final String TAG = PosFragment.class.getSimpleName();
-    public static List<Item> dumyPOSItems = new ArrayList<Item>(Arrays.asList(new Item(0,"vaseline", 1, "shampoo", 2, 1, null,null),
-            new Item(0,"safeguard", 1, "soap", 2, 1, null,null),
+    public static List<Item> dumyPOSItems = new ArrayList<Item>(Arrays.asList(new Item(0,"vaseline", 1, "shampoo", 2, 1, "apple.png",null),
+            new Item(0,"safeguard", 1, "soap", 2, 1, "apple.png",null),
             new Item(0,"silka", 1, "soap", 2, 1, null,null)));
 
     @BindView(R.id.itemAutoComplete)
@@ -121,7 +121,6 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
         PosItemAutoCompleteAdapter posAdapter = new PosItemAutoCompleteAdapter(getActivity(), dumyPOSItems);
         itemAutoComplete.setAdapter(posAdapter);
         itemAutoComplete.setOnItemClickListener(this);
-
 
         list.setAdapter(new PosAdapter(getActivity(), itemCarts));
         list.setEmptyView(view.findViewById(R.id.empty));

@@ -1,6 +1,8 @@
 package ph.kita.devsquare.com.adapters;
 
 import android.content.Context;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +10,12 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
+import ph.kita.devsquare.com.utils.Utility;
 
 /**
  * Created by abnonymous on 6/22/16.
@@ -68,7 +75,7 @@ public class PosItemAutoCompleteAdapter extends BaseAdapter implements Filterabl
         holder.name.setText(this.getItem(position).getName());
         holder.stock.setText("" + this.getItem(position).getStock());
         holder.price.setText("" + this.getItem(position).getPrice());
-
+        Utility.setImage(this.getItem(position).getImageURL(), holder.img, mContext);
         return convertView;
     }
 
@@ -76,6 +83,7 @@ public class PosItemAutoCompleteAdapter extends BaseAdapter implements Filterabl
         @BindView(R.id.name) TextView name;
         @BindView(R.id.stock) TextView stock;
         @BindView(R.id.price) TextView price;
+        @BindView(R.id.img) ImageView img;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

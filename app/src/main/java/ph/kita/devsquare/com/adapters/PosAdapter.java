@@ -15,6 +15,7 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +26,7 @@ import ph.kita.devsquare.com.dialog.ConfirmationDialog;
 import ph.kita.devsquare.com.fragment.PosFragment;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
+import ph.kita.devsquare.com.utils.Utility;
 
 /**
  * Created by abnonymous on 6/22/16.
@@ -85,6 +87,8 @@ public class PosAdapter extends BaseAdapter{
         holder.qtNwt.setText("" + this.getItem(position).getQualitytNWeight());
         holder.price.setText("" + this.getItem(position).getPrice());
         holder.totalPrice.setText("" + (this.getItem(position).getPrice() * this.getItem(position).getQualitytNWeight()));
+        Utility.setImage(this.getItem(position).getImageURL(), holder.img, mContext);
+
         holder.closed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,6 +116,7 @@ public class PosAdapter extends BaseAdapter{
         @BindView(R.id.price) TextView price;
         @BindView(R.id.totalPrice) TextView totalPrice;
         @BindView(R.id.closed) ImageView closed;
+        @BindView(R.id.img) ImageView img;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
