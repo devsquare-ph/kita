@@ -132,8 +132,10 @@ public class PosCartFragment extends Fragment{
     public void increment(Button button) {
         try {
 
-            if (this.item.getQualitytNWeight() == this.item.getStock())
+            if (this.item.getQualitytNWeight() == this.item.getStock()) {
+                Toast.makeText(getActivity(), "Maximum Stocks is " + item.getStock(), Toast.LENGTH_SHORT).show();
                 return;
+            }
 
             //increment
             this.qtNwt.setText("" + this.item.incQualitytNWeight());
@@ -147,7 +149,7 @@ public class PosCartFragment extends Fragment{
     public void decrement() {
         try{
             //decrement
-            if(item.getQualitytNWeight() > 0)
+            if(item.getQualitytNWeight() > 1)
             this.qtNwt.setText("" + this.item.decQualitytNWeight());
         }catch (NumberFormatException e){
             this.qtNwt.setText("0");
