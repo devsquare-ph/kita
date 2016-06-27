@@ -133,6 +133,17 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
         PosItemAutoCompleteAdapter posAdapter = new PosItemAutoCompleteAdapter(getActivity(), dumyPOSItems);
         itemAutoComplete.setAdapter(posAdapter);
         itemAutoComplete.setOnItemClickListener(this);
+        itemAutoComplete.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Log.d(TAG, "onTouch");
+                if(itemAutoComplete.getText().toString().isEmpty()) {
+                    itemAutoComplete.showDropDown();
+                    Log.d(TAG, "autocomplete isEmpty");
+                }
+                return false;
+            }
+        });
 
         list.setAdapter(new PosAdapter(getActivity(), itemCarts, new OnPosAdapterListener() {
             @Override
