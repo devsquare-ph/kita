@@ -32,6 +32,7 @@ import ph.kita.devsquare.com.utils.Utility;
 public class PosItemAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
     private static final int MAX_RESULTS = 10;
+    private static final String TAG = PosItemAutoCompleteAdapter.class.getSimpleName();
     private Context mContext;
     private List<Item> items;
     private List<Item> suggestionItems = new ArrayList<>();
@@ -40,6 +41,7 @@ public class PosItemAutoCompleteAdapter extends BaseAdapter implements Filterabl
     {
         mContext = context;
         this.items = items;
+        this.suggestionItems.addAll(items);
     }
 
     @Override
@@ -102,13 +104,16 @@ public class PosItemAutoCompleteAdapter extends BaseAdapter implements Filterabl
 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
+                Log.d(TAG, "performFiltering");
+                Log.d(TAG, "isConstraint null: " + (constraint == null));
                 suggestionItems.clear();
 
-                if (constraint != null && items != null) {
+                if (constraint != null && items != null && suggestionItems != null) {
                     for(Item i : items){
                         if(i.getName().contains(constraint))
                             suggestionItems.add(i);
                     }
+
                 }
 
                 FilterResults results = new FilterResults(); // Create new Filter Results and return this to publishResults;
@@ -120,7 +125,9 @@ public class PosItemAutoCompleteAdapter extends BaseAdapter implements Filterabl
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                if (results != null && results.count > 0) {
+                Log.d(TAG, "publishResults");
+                if (results != null && results.count >= 0) {
+                    Log.d(TAG, "notifyDataSetChanged");
                     notifyDataSetChanged();
                 } else {
                     notifyDataSetInvalidated();
