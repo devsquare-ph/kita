@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import ph.kita.devsquare.com.kita.R;
 
@@ -63,6 +64,10 @@ public class Utility {
                 .error(R.mipmap.ic_launcher)
                 .into(iv);
 
+    }
+
+    public static <T> void setTopItem(List<T> t, int position){
+        t.add(0, t.remove(position));
     }
 
 }

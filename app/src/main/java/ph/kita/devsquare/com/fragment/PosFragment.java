@@ -130,8 +130,7 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
         Log.d(TAG,"onCreateView");
         ButterKnife.bind(this, view);
 
-        PosItemAutoCompleteAdapter posAdapter = new PosItemAutoCompleteAdapter(getActivity(), dumyPOSItems);
-        itemAutoComplete.setAdapter(posAdapter);
+        itemAutoComplete.setAdapter(new PosItemAutoCompleteAdapter(getActivity(), dumyPOSItems));
         itemAutoComplete.setOnItemClickListener(this);
         itemAutoComplete.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -172,6 +171,8 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
         Utility.hideSoftKey(getActivity(), itemAutoComplete);
 
         Item item = (Item) adapterView.getItemAtPosition(position);
+        ((PosItemAutoCompleteAdapter) adapterView.getAdapter()).setItemTop(position);
+
         Log.d(TAG,"ItemSelected name: " + item.getName());
         onFragmentPOSListener.onCart(item);
 

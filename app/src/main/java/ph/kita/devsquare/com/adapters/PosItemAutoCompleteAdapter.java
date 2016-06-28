@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -90,6 +91,10 @@ public class PosItemAutoCompleteAdapter extends BaseAdapter implements Filterabl
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+    }
+
+    public void setItemTop(int position){
+        Utility.setTopItem(items, position);
     }
 
     @Override
