@@ -1,6 +1,8 @@
 package ph.kita.devsquare.com.adapters;
 
 import android.content.Context;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,15 +10,21 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
+import ph.kita.devsquare.com.utils.Utility;
 
 /**
  * Created by abnonymous on 6/22/16.
@@ -25,6 +33,7 @@ import ph.kita.devsquare.com.objects.Item;
 public class PosItemAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
     private static final int MAX_RESULTS = 10;
+    private static final String TAG = PosItemAutoCompleteAdapter.class.getSimpleName();
     private Context mContext;
     private List<Item> items;
     private List<Item> suggestionItems = new ArrayList<>();
@@ -33,6 +42,7 @@ public class PosItemAutoCompleteAdapter extends BaseAdapter implements Filterabl
     {
         mContext = context;
         this.items = items;
+        this.suggestionItems.addAll(items);
     }
 
     @Override
@@ -68,7 +78,7 @@ public class PosItemAutoCompleteAdapter extends BaseAdapter implements Filterabl
         holder.name.setText(this.getItem(position).getName());
         holder.stock.setText("" + this.getItem(position).getStock());
         holder.price.setText("" + this.getItem(position).getPrice());
-
+        Utility.setImage(this.getItem(position).getImageURL(), holder.img, mContext);
         return convertView;
     }
 
@@ -76,10 +86,15 @@ public class PosItemAutoCompleteAdapter extends BaseAdapter implements Filterabl
         @BindView(R.id.name) TextView name;
         @BindView(R.id.stock) TextView stock;
         @BindView(R.id.price) TextView price;
+        @BindView(R.id.img) ImageView img;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+    }
+
+    public void setItemTop(int position){
+        Utility.setTopItem(items, position);
     }
 
     @Override
@@ -94,13 +109,16 @@ public class PosItemAutoCompleteAdapter extends BaseAdapter implements Filterabl
 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
+                Log.d(TAG, "performFiltering");
+                Log.d(TAG, "isConstraint null: " + (constraint == null));
                 suggestionItems.clear();
 
-                if (constraint != null && items != null) {
+                if (constraint != null && items != null && suggestionItems != null) {
                     for(Item i : items){
                         if(i.getName().contains(constraint))
                             suggestionItems.add(i);
                     }
+
                 }
 
                 FilterResults results = new FilterResults(); // Create new Filter Results and return this to publishResults;
@@ -112,7 +130,9 @@ public class PosItemAutoCompleteAdapter extends BaseAdapter implements Filterabl
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                if (results != null && results.count > 0) {
+                Log.d(TAG, "publishResults");
+                if (results != null && results.count >= 0) {
+                    Log.d(TAG, "notifyDataSetChanged");
                     notifyDataSetChanged();
                 } else {
                     notifyDataSetInvalidated();

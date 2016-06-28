@@ -15,13 +15,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
+import ph.kita.devsquare.com.utils.Utility;
 
 /**
  * Created by jericcabana on 19/06/2016.
@@ -30,8 +34,8 @@ public class PosCartFragment extends Fragment{
 
     private static final String TAG = PosCartFragment.class.getSimpleName();
 
-    @BindView(R.id.tag)
-    TextView tag;
+//    @BindView(R.id.tag)
+//    TextView tag;
     @BindView(R.id.name)
     TextView name;
     @BindView(R.id.stock)
@@ -48,6 +52,8 @@ public class PosCartFragment extends Fragment{
     Button decrement;
     @BindView(R.id.addCart)
     Button addCart;
+//    @BindView(R.id.checkOut)
+//    Button checkOut;
 
     static final String ID = "ID";
     static final String NAME = "NAME";
@@ -59,14 +65,17 @@ public class PosCartFragment extends Fragment{
 
     private Item item;
     private OnFragmentPOSCartListener onFragmentPOSCartListener;
+    //remove checkout feature
+//    private PosFragment.OnFragmentPOSListener onFragmentPOSListener;
 
     public interface OnFragmentPOSCartListener{
         public void onAddToCart(Item item);
     }
 
     public static Fragment newInstance(int id, String name, float price, String imgUrl, float qtNwt, String tag, float stock) throws IOException{
-
-        if(name != null && imgUrl != null && tag != null)
+        Log.d(TAG, "name: " + name);
+        Log.d(TAG, "tag: " + tag);
+        if(name == null && tag == null)
             throw new IOException("Input cannot be null");
 
         PosCartFragment posCart = new PosCartFragment();
@@ -91,6 +100,12 @@ public class PosCartFragment extends Fragment{
             onFragmentPOSCartListener = (OnFragmentPOSCartListener) context;
         }
 
+        //remove checkout
+//        if(context instanceof  Activity && context instanceof PosFragment.OnFragmentPOSListener){
+//            Log.d(TAG,"OnFragmentPOSListener");
+//            onFragmentPOSListener = (PosFragment.OnFragmentPOSListener) context;
+//        }
+
     }
 
     @Nullable
@@ -103,11 +118,12 @@ public class PosCartFragment extends Fragment{
         if(item == null)
         item = new Item(getArguments().getInt(ID), getArguments().getString(NAME),getArguments().getFloat(PRICE),getArguments().getString(ITEM_TAG), getArguments().getFloat(STOCK), getArguments().getFloat(QTNWT), getArguments().getString(IMGURL),null);
 
-        tag.setText(item.getTag());
+//        tag.setText(item.getTag());
         name.setText(item.getName());
         price.setText("" + item.getPrice());
         qtNwt.setText("" + item.getQualitytNWeight());
         stock.setText("" + item.getStock());
+        Utility.setImage(item.getImageURL(), img, getActivity());
 
         return view;
     }
@@ -116,8 +132,10 @@ public class PosCartFragment extends Fragment{
     public void increment(Button button) {
         try {
 
-            if (this.item.getQualitytNWeight() == this.item.getStock())
+            if (this.item.getQualitytNWeight() == this.item.getStock()) {
+                Toast.makeText(getActivity(), "Maximum Stocks is " + item.getStock(), Toast.LENGTH_SHORT).show();
                 return;
+            }
 
             //increment
             this.qtNwt.setText("" + this.item.incQualitytNWeight());
@@ -131,7 +149,7 @@ public class PosCartFragment extends Fragment{
     public void decrement() {
         try{
             //decrement
-            if(item.getQualitytNWeight() > 0)
+            if(item.getQualitytNWeight() > 1)
             this.qtNwt.setText("" + this.item.decQualitytNWeight());
         }catch (NumberFormatException e){
             this.qtNwt.setText("0");
@@ -141,8 +159,34 @@ public class PosCartFragment extends Fragment{
     @OnClick(R.id.addCart)
     public void addCart() {
 //        Toast.makeText(getActivity(),"addCart",Toast.LENGTH_SHORT).show();
-        this.item.setPrice(Float.valueOf(this.price.getText().toString()));
-        this.onFragmentPOSCartListener.onAddToCart(item);
+
+        float price = Float.valueOf(this.price.getText().toString());
+        float qnttyNwght = Float.valueOf(this.qtNwt.getText().toString());
+
+        if(price > 0 && qnttyNwght > 0) {
+            this.item.setPrice(Float.valueOf(this.price.getText().toString()));
+            this.onFragmentPOSCartListener.onAddToCart(item);
+        }else{
+            Toast.makeText(getActivity(), "Price and Quantity cannot be empty.", Toast.LENGTH_SHORT).show();
+        }
     }
+
+    //remove checkout
+//    @OnClick(R.id.checkOut)
+//    public void checkOut() {
+//        this.item.setPrice(Float.valueOf(this.price.getText().toString()));
+//
+//        float price = Float.valueOf(this.price.getText().toString());
+//        float qnttyNwght = Float.valueOf(this.qtNwt.getText().toString());
+//
+//        if(price > 0 && qnttyNwght > 0) {
+//            Toast.makeText(getActivity(), "check out", Toast.LENGTH_SHORT).show();
+//            getActivity().getSupportFragmentManager().popBackStack();
+//            onFragmentPOSListener.onCheckOut(new ArrayList<Item>(Arrays.asList(item)));
+//        }else{
+//            Toast.makeText(getActivity(), "Price and Quantity cannot be empty.", Toast.LENGTH_SHORT).show();
+//        }
+//
+//    }
 
 }

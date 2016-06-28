@@ -3,6 +3,8 @@ package ph.kita.devsquare.com.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +15,18 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ph.kita.devsquare.com.dialog.ConfirmationDialog;
 import ph.kita.devsquare.com.fragment.PosFragment;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
+import ph.kita.devsquare.com.utils.Utility;
 
 /**
  * Created by abnonymous on 6/22/16.
@@ -34,6 +39,13 @@ public class PosAdapter extends BaseAdapter{
     private Context mContext;
 //    private List<Item> items = new ArrayList<Item>();
     private List<Item> items;
+
+    private OnPosAdapterListener onPosAdapterListener;
+
+    public interface OnPosAdapterListener{
+        public void refresh();
+    }
+
     public PosAdapter(Context context)
     {
         mContext = context;
@@ -41,11 +53,12 @@ public class PosAdapter extends BaseAdapter{
 //        this.items = PosFragment.dumyPOSItems;
     }
 
-    public PosAdapter(Context context, List<Item> items)
+    public PosAdapter(Context context, List<Item> items, OnPosAdapterListener onPosAdapterListener)
     {
         mContext = context;
         this.items = items;
 //        this.items = PosFragment.dumyPOSItems;
+        this.onPosAdapterListener = onPosAdapterListener;
     }
 
     @Override
@@ -82,13 +95,24 @@ public class PosAdapter extends BaseAdapter{
         holder.qtNwt.setText("" + this.getItem(position).getQualitytNWeight());
         holder.price.setText("" + this.getItem(position).getPrice());
         holder.totalPrice.setText("" + (this.getItem(position).getPrice() * this.getItem(position).getQualitytNWeight()));
+        Utility.setImage(this.getItem(position).getImageURL(), holder.img, mContext);
+
         holder.closed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //closed item
+                ConfirmationDialog confirmationDialog = ConfirmationDialog.newInstance("Are you sure to remove?");
 
-                items.remove(position);
-                notifyDataSetChanged();
+                confirmationDialog.setOnListener(new ConfirmationDialog.OnDialogConfirmationListener() {
+                    @Override
+                    public void onOK() {
+                        items.remove(position);
+                        notifyDataSetChanged();
+                        onPosAdapterListener.refresh();
+                    }
+                });
+
+                confirmationDialog.show(((FragmentActivity)mContext).getSupportFragmentManager(), ConfirmationDialog.class.getSimpleName());
 
             }
         });
@@ -101,36 +125,37 @@ public class PosAdapter extends BaseAdapter{
         @BindView(R.id.price) TextView price;
         @BindView(R.id.totalPrice) TextView totalPrice;
         @BindView(R.id.closed) ImageView closed;
+        @BindView(R.id.img) ImageView img;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
 
-    public void addItem(final Item item) {
-
-//        items.add(item);
-//        items.addAll(new ArrayList<Item>(Arrays.asList(item)));
-
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-
-                if(getCount() == 0)
-                items = new ArrayList<Item>();
-
-                items.add(item);
-                notifyDataSetChanged();
-
-                return null;
-            }
-        }.execute();
-
-
-        Log.d(TAG, "Add Item: " + item.getName());
-        Log.d(TAG, "Items size: " + items.size());
-
-    }
+//    public void addItem(final Item item) {
+//
+////        items.add(item);
+////        items.addAll(new ArrayList<Item>(Arrays.asList(item)));
+//
+//        new AsyncTask<Void, Void, Void>() {
+//            @Override
+//            protected Void doInBackground(Void... voids) {
+//
+//                if(getCount() == 0)
+//                items = new ArrayList<Item>();
+//
+//                items.add(item);
+//                notifyDataSetChanged();
+//
+//                return null;
+//            }
+//        }.execute();
+//
+//
+//        Log.d(TAG, "Add Item: " + item.getName());
+//        Log.d(TAG, "Items size: " + items.size());
+//
+//    }
 
     public void addItems(final List<Item> items) {
 

@@ -16,6 +16,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import ph.kita.devsquare.com.fragment.InventoryFragment;
 import ph.kita.devsquare.com.fragment.InventoryItemFragment;
@@ -25,7 +26,7 @@ import ph.kita.devsquare.com.fragment.PosReceiptFragment;
 import ph.kita.devsquare.com.objects.Item;
 import ph.kita.devsquare.com.utils.Constant;
 
-public class MainActivity extends FragmentActivity implements PosFragment.OnFragmentPOSListener, PosCartFragment.OnFragmentPOSCartListener, InventoryFragment.OnFragmentInventoryListener, InventoryItemFragment.OnFragmentInventoryItemListener {
+public class MainActivity extends FragmentActivity implements PosFragment.OnFragmentPOSListener, PosCartFragment.OnFragmentPOSCartListener, InventoryFragment.OnFragmentInventoryListener, InventoryItemFragment.OnFragmentInventoryItemListener, PosReceiptFragment.OnFragmentReceiptListener {
 
     private String TAG = getClass().getSimpleName();
 
@@ -34,6 +35,7 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG,"onCreate MainACtivtiy");
+        Log.d(TAG,"onCreate getFileDir: " + getFilesDir());
          /*Set the Home Fragment*/
         Fragment fragment = new Fragment();
         if (fragment != null) {
@@ -190,5 +192,11 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
         getSupportFragmentManager().popBackStack();
     }
 
-
+    @Override
+    public void onSave(List<Item> item) {
+        Toast.makeText(this, "save purchase items", Toast.LENGTH_SHORT).show();
+        PosFragment posFragment = (PosFragment) getSupportFragmentManager().findFragmentByTag(PosFragment.class.getSimpleName());
+        posFragment.clear();
+        getSupportFragmentManager().popBackStack();
+    }
 }

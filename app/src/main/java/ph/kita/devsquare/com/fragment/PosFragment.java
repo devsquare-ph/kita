@@ -5,8 +5,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -29,14 +32,16 @@ import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
 import ph.kita.devsquare.com.utils.Utility;
 
+import static ph.kita.devsquare.com.adapters.PosAdapter.*;
+
 /**
  * Created by jericcabana on 19/06/2016.
  */
 public class PosFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     private static final String TAG = PosFragment.class.getSimpleName();
-    public static List<Item> dumyPOSItems = new ArrayList<Item>(Arrays.asList(new Item(0,"vaseline", 1, "shampoo", 2, 1, null,null),
-            new Item(0,"safeguard", 1, "soap", 2, 1, null,null),
+    public static List<Item> dumyPOSItems = new ArrayList<Item>(Arrays.asList(new Item(0,"vaseline", 1, "shampoo", 2, 1, "apple.png",null),
+            new Item(0,"safeguard", 1, "soap", 2, 1, "apple.png",null),
             new Item(0,"silka", 1, "soap", 2, 1, null,null)));
 
     @BindView(R.id.itemAutoComplete)
@@ -51,8 +56,6 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
     private List<Item> itemCarts = new ArrayList<>();
 
     public void addPosCart(Item item){
-
-        PosAdapter posAdapter = (PosAdapter) list.getAdapter();
 
         //check duplicate data in itemCarts
         int i;
@@ -70,6 +73,14 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
         if(itemCarts.size() == i) {
             itemCarts.add(item);
         }
+
+        setTotalPrice();
+
+    }
+
+    private void setTotalPrice() {
+
+        PosAdapter posAdapter = (PosAdapter) list.getAdapter();
 
         //set totalprice
         float totalPrices = 0.0f;
@@ -95,10 +106,11 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
     private OnFragmentPOSListener onFragmentPOSListener;
 
     public interface OnFragmentPOSListener {
-
         public void onCart(Item item);
         public void onCheckOut(ArrayList<Item> items);
     }
+
+
 
     @Override
     public void onAttach(Context context) {
@@ -118,12 +130,27 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
         Log.d(TAG,"onCreateView");
         ButterKnife.bind(this, view);
 
-        PosItemAutoCompleteAdapter posAdapter = new PosItemAutoCompleteAdapter(getActivity(), dumyPOSItems);
-        itemAutoComplete.setAdapter(posAdapter);
+        itemAutoComplete.setAdapter(new PosItemAutoCompleteAdapter(getActivity(), dumyPOSItems));
         itemAutoComplete.setOnItemClickListener(this);
+        itemAutoComplete.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Log.d(TAG, "onTouch");
+                if(itemAutoComplete.getText().toString().isEmpty()) {
+                    itemAutoComplete.showDropDown();
+                    Log.d(TAG, "autocomplete isEmpty");
+                }
+                return false;
+            }
+        });
 
+        list.setAdapter(new PosAdapter(getActivity(), itemCarts, new OnPosAdapterListener() {
+            @Override
+            public void refresh() {
+                setTotalPrice();
+            }
+        }));
 
-        list.setAdapter(new PosAdapter(getActivity(), itemCarts));
         list.setEmptyView(view.findViewById(R.id.empty));
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -144,6 +171,8 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
         Utility.hideSoftKey(getActivity(), itemAutoComplete);
 
         Item item = (Item) adapterView.getItemAtPosition(position);
+        ((PosItemAutoCompleteAdapter) adapterView.getAdapter()).setItemTop(position);
+
         Log.d(TAG,"ItemSelected name: " + item.getName());
         onFragmentPOSListener.onCart(item);
 
@@ -151,8 +180,20 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
 
     @OnClick(R.id.checkOut)
     public void checkOut(){
-        Toast.makeText(getActivity(), "check out", Toast.LENGTH_SHORT).show();
-        onFragmentPOSListener.onCheckOut(new ArrayList<Item>(itemCarts));
+
+        //validation for purchasing item
+        if(itemCarts.size() > 0) {
+            Toast.makeText(getActivity(), "check out", Toast.LENGTH_SHORT).show();
+            onFragmentPOSListener.onCheckOut(new ArrayList<Item>(itemCarts));
+        }{
+            Toast.makeText(getActivity(), "Please Add Item", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void clear(){
+        itemCarts.clear();
+        PosAdapter posAdapter = (PosAdapter) list.getAdapter();
+        posAdapter.notifyDataSetChanged();
     }
 
 }

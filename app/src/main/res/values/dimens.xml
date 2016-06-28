@@ -4,4 +4,12 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="five">5dp</dimen>
     <dimen name="twenty">20dp</dimen>
+
+    <!-- scale-independent fixels -->
+    <dimen name="sp_ten">10sp</dimen>
+    <dimen name="sp_fift_teen">15sp</dimen>
+    <dimen name="sp_twenty">20sp</dimen>
+    <dimen name="sp_twenty_five">25sp</dimen>
+    <dimen name="sp_thirty">30sp</dimen>
+
 </resources>
