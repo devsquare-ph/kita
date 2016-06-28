@@ -66,11 +66,11 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
                         String tagFragment = "";
                         switch (position) {
 
-                            case Constant.DRAWER_POS:
+                            case Constant.STATE_POS:
                                 fragment = new PosFragment();
                                 tagFragment = PosFragment.class.getSimpleName();
                                 break;
-                            case Constant.DRAWER_INVENTORY:
+                            case Constant.STATE_INVENTORY:
                                 fragment = new InventoryFragment();
                                 tagFragment = InventoryFragment.class.getSimpleName();
                                 break;
@@ -136,9 +136,10 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
     }
 
     @Override
-    public void onAddItem() {
-        Log.d(TAG, "onCheckOut");
-        Fragment fragment = InventoryItemFragment.newInstance();
+    public void onUpdateItem(Item item) {
+        Log.d(TAG, "Update Stock");
+
+        Fragment fragment = InventoryItemFragment.newInstance(item);
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -149,10 +150,45 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
     }
 
     @Override
-    public void onSaveItem(Item item) {
-        PosFragment.dumyPOSItems.add(item);
+    public void onAddItem() {
+        Log.d(TAG, "Add Stock");
+        Fragment fragment = InventoryItemFragment.newInstance(null);
+        if (fragment != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.main, fragment, InventoryItemFragment.class.getSimpleName());
+            fragmentTransaction.addToBackStack(InventoryItemFragment.class.getSimpleName());
+            fragmentTransaction.commit();
+        }
+    }
 
-        Toast.makeText(this,"itemsize: " + PosFragment.dumyPOSItems.size(), Toast.LENGTH_SHORT).show();
+    @Override
+    public void onSaveItem(Item item, int state) {
+
+        switch (state){
+            case InventoryItemFragment.UPDATE:
+
+                for (int i = 0; i < PosFragment.dumyPOSItems.size(); i++){
+
+                    if (PosFragment.dumyPOSItems.get(i).getName().equalsIgnoreCase(item.getName())){
+
+                        PosFragment.dumyPOSItems.set(i,item);
+                    }
+
+                }
+
+                Toast.makeText(this, "Product has been updated " , Toast.LENGTH_LONG).show();
+
+                break;
+            case InventoryItemFragment.ADD:
+
+                PosFragment.dumyPOSItems.add(item);
+                Toast.makeText(this,"itemsize: " + PosFragment.dumyPOSItems.size(), Toast.LENGTH_SHORT).show();
+
+                break;
+        }
         getSupportFragmentManager().popBackStack();
     }
+
+
 }

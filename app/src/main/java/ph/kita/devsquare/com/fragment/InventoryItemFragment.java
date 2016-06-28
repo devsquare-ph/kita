@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -22,6 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
+import ph.kita.devsquare.com.utils.Constant;
 
 /**
  * Created by jericcabana on 19/06/2016.
@@ -29,6 +31,8 @@ import ph.kita.devsquare.com.objects.Item;
 public class InventoryItemFragment extends Fragment{
 
     private static final String TAG = InventoryItemFragment.class.getSimpleName();
+    public final static int ADD = 0;
+    public final static int UPDATE = 1;
 
     @BindView(R.id.name)
     TextView name;
@@ -41,12 +45,18 @@ public class InventoryItemFragment extends Fragment{
 
     private OnFragmentInventoryItemListener onFragmentInventoryItemListener;
 
+    private Item item;
+
     public interface OnFragmentInventoryItemListener{
-        public void onSaveItem(Item item);
+        public void onSaveItem(Item item, int state);
     }
 
-    public static Fragment newInstance(){
-        return new InventoryItemFragment();
+    public static Fragment newInstance(Item items){
+        InventoryItemFragment inventoryItemFragment = new InventoryItemFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Constant.INVENTORY_ITEM, items);
+        inventoryItemFragment.setArguments(bundle);
+        return inventoryItemFragment;
     }
 
     @Override
@@ -66,6 +76,18 @@ public class InventoryItemFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_inventory_item, container, false);
 
         ButterKnife.bind(this, view);
+        Bundle bundle = getArguments();
+        item = bundle.getParcelable(Constant.INVENTORY_ITEM);
+
+        if (item != null){
+            Log.d(TAG, "UPDATE");
+            name.setText(item.getName());
+            price.setText(String.valueOf(item.getPrice()));
+            tag.setText(String.valueOf(item.getTag()));
+            stock.setText(String.valueOf(item.getStock()));
+        }else {
+            Log.d(TAG, "ADD");
+        }
 
         return view;
     }
@@ -73,6 +95,7 @@ public class InventoryItemFragment extends Fragment{
     @OnClick(R.id.save)
     public void save(){
 
+       int state;
         float prc;
         float stck;
         try{
@@ -88,7 +111,13 @@ public class InventoryItemFragment extends Fragment{
         catch(NumberFormatException e){
             stck = 0;
         }
-        onFragmentInventoryItemListener.onSaveItem(new Item(0, name.getText().toString(), prc, tag.getText().toString(), stck, 0, "", new Date(System.currentTimeMillis())));
+
+        if (item != null)
+            state = UPDATE;
+        else
+            state = ADD;
+
+        onFragmentInventoryItemListener.onSaveItem(new Item(0, name.getText().toString(), prc, tag.getText().toString(), stck, 0, "", new Date(System.currentTimeMillis())), state);
     }
 
 }
