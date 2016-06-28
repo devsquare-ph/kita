@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -21,6 +22,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -56,6 +58,7 @@ public class InventoryFragment extends Fragment {
 
     public interface OnFragmentInventoryListener {
         public void onAddItem();
+        public void onUpdateItem(Item item);
     }
 
     @Override
@@ -85,6 +88,17 @@ public class InventoryFragment extends Fragment {
 
         inventoryAdapter = new InventoryAdapter(getActivity());
         list.setAdapter(inventoryAdapter);
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Item item = (Item) parent.getItemAtPosition(position);
+                Log.d(TAG, "ITEM " + item.getName());
+                onFragmentInventoryListener.onUpdateItem(item);
+            }
+        });
+
         totalItem.setText("" + PosFragment.dumyPOSItems.size());
 
         // Capture Text in EditText

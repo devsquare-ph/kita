@@ -6,8 +6,10 @@ package ph.kita.devsquare.com.utils;
 public interface Constant {
 
 
-    /*Drawer item*/
-    int DRAWER_POS = 0;
-    int DRAWER_INVENTORY = 1;
+    /*State item*/
+    int STATE_POS = 0;
+    int STATE_INVENTORY = 1;
+
+    String INVENTORY_ITEM = "inventory";
 
 }
