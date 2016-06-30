@@ -7,8 +7,9 @@ public interface Constant {
 
 
     /*State item*/
-    int STATE_POS = 0;
-    int STATE_INVENTORY = 1;
+    int STATE_DASHBOARD = 0;
+    int STATE_POS = 1;
+    int STATE_INVENTORY = 2;
 
     String INVENTORY_ITEM = "inventory";
 

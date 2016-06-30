@@ -4,5 +4,5 @@
     <color name="colorPrimaryDark">#B2DFDB</color>
     <color name="colorAccent">#E0F2F1</color>
     <color name="item_name">#66000000</color>
-
+    <color name="transparent">#00000000</color>
 </resources>

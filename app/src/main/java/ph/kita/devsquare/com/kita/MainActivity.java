@@ -18,11 +18,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ph.kita.devsquare.com.fragment.DashboardFragment;
 import ph.kita.devsquare.com.fragment.InventoryFragment;
 import ph.kita.devsquare.com.fragment.InventoryItemFragment;
 import ph.kita.devsquare.com.fragment.PosCartFragment;
 import ph.kita.devsquare.com.fragment.PosFragment;
 import ph.kita.devsquare.com.fragment.PosReceiptFragment;
+import ph.kita.devsquare.com.fragment.StatisticFragment;
 import ph.kita.devsquare.com.objects.Item;
 import ph.kita.devsquare.com.utils.Constant;
 
@@ -41,8 +43,9 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragment = new PosFragment();
-            fragmentTransaction.replace(R.id.main, fragment, PosFragment.class.getSimpleName());
+//            fragment = new DashboardFragment();
+            fragment = new StatisticFragment();
+            fragmentTransaction.replace(R.id.main, fragment, DashboardFragment.class.getSimpleName());
             fragmentTransaction.commit();
         }
 
@@ -50,11 +53,13 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
 
         PrimaryDrawerItem drawerPos = new PrimaryDrawerItem().withName(R.string.drawer_item_pos);
         PrimaryDrawerItem drawerInventory = new PrimaryDrawerItem().withName(R.string.drawer_item_inventory);
+        PrimaryDrawerItem dashboard = new PrimaryDrawerItem().withName(R.string.drawer_item_dashboard);
 
         //create the drawer and remember the `Drawer` result object
         Drawer result = new DrawerBuilder()
                 .withActivity(this)
                 .addDrawerItems(
+                        dashboard,
                         drawerPos,
                         drawerInventory
                 )
@@ -67,7 +72,10 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
                         Fragment fragment = new Fragment();
                         String tagFragment = "";
                         switch (position) {
-
+                            case Constant.STATE_DASHBOARD:
+                                fragment = DashboardFragment.newInstance();
+                                tagFragment = DashboardFragment.class.getSimpleName();
+                                break;
                             case Constant.STATE_POS:
                                 fragment = new PosFragment();
                                 tagFragment = PosFragment.class.getSimpleName();
