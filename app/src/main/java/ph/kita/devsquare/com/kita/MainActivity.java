@@ -43,9 +43,8 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragment = new DashboardFragment();
             fragment = new StatisticFragment();
-            fragmentTransaction.replace(R.id.main, fragment, DashboardFragment.class.getSimpleName());
+            fragmentTransaction.replace(R.id.main, fragment, StatisticFragment.class.getSimpleName());
             fragmentTransaction.commit();
         }
 
@@ -73,8 +72,8 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
                         String tagFragment = "";
                         switch (position) {
                             case Constant.STATE_DASHBOARD:
-                                fragment = DashboardFragment.newInstance();
-                                tagFragment = DashboardFragment.class.getSimpleName();
+                                fragment = StatisticFragment.newInstance();
+                                tagFragment = StatisticFragment.class.getSimpleName();
                                 break;
                             case Constant.STATE_POS:
                                 fragment = new PosFragment();

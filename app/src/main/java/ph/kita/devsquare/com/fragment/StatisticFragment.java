@@ -64,8 +64,8 @@ public class StatisticFragment extends Fragment {
 
         tabLayout = (TabLayout) view.findViewById(R.id.toolbar);
 
-        ViewGroup tab = (ViewGroup) view.findViewById(R.id.tab);
-        tab.addView(LayoutInflater.from(getActivity()).inflate(R.layout.demo_distribute_evenly, tab, false));
+//        ViewGroup tab = (ViewGroup) view.findViewById(R.id.tab);
+//        tab.addView(LayoutInflater.from(getActivity()).inflate(R.layout.demo_distribute_evenly, tab, false));
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         //animated tabs
@@ -73,10 +73,11 @@ public class StatisticFragment extends Fragment {
 
         FragmentPagerItems pages = new FragmentPagerItems(getActivity());
         pages.add(FragmentPagerItem.of("Sales", SalesGraphFragment.class));
-        pages.add(FragmentPagerItem.of("Product Sales", DashboardFragment.class));
+        pages.add(FragmentPagerItem.of("Demand", DemandGraphFragment.class));
 
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
-                getActivity().getSupportFragmentManager(), pages);
+                getChildFragmentManager(), pages);
+
         viewPager.setAdapter(adapter);
         viewPagerTab.setViewPager(viewPager);
 

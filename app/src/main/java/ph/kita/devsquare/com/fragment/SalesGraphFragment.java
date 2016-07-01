@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -66,7 +68,6 @@ public class SalesGraphFragment extends Fragment {
         setData(5, 100);
         setDailySpinner(view);
 
-
         //get reference to the spinner from the XML layout
         Spinner spinner = (Spinner) view.findViewById(R.id.product_filter);
 
@@ -85,7 +86,18 @@ public class SalesGraphFragment extends Fragment {
         //set the ArrayAdapter to the spinner
         spinner.setAdapter(dataAdapter);
         //attach the listener to the spinner
-//        spinner.setOnItemSelectedListener(new MyOnItemSelectedListener());
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                setData(5, 100);
+                mChart.invalidate();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         return view;
     }
 
@@ -181,5 +193,4 @@ public class SalesGraphFragment extends Fragment {
             mChart.setData(data);
         }
     }
-
 }
