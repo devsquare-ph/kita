@@ -12,4 +12,7 @@ public interface Constant {
 
     String INVENTORY_ITEM = "inventory";
 
+    /*Camera Orientation*/
+    int CAMERA_ORIENTATION = 90;
+
 }

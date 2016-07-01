@@ -173,7 +173,6 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
                 for (int i = 0; i < PosFragment.dumyPOSItems.size(); i++){
 
                     if (PosFragment.dumyPOSItems.get(i).getName().equalsIgnoreCase(item.getName())){
-
                         PosFragment.dumyPOSItems.set(i,item);
                     }
 
@@ -185,7 +184,7 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
             case InventoryItemFragment.ADD:
 
                 PosFragment.dumyPOSItems.add(item);
-                Toast.makeText(this,"itemsize: " + PosFragment.dumyPOSItems.size(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Product has been added", Toast.LENGTH_SHORT).show();
 
                 break;
         }

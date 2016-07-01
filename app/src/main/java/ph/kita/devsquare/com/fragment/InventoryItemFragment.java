@@ -1,16 +1,21 @@
 package ph.kita.devsquare.com.fragment;
 
 import android.content.Context;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +28,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
+import ph.kita.devsquare.com.utils.CameraPreview;
+import ph.kita.devsquare.com.utils.CameraUtility;
 import ph.kita.devsquare.com.utils.Constant;
 
 /**
@@ -42,9 +49,10 @@ public class InventoryItemFragment extends Fragment{
     TextView tag;
     @BindView(R.id.stock)
     TextView stock;
+    @BindView(R.id.lnrCamera)
+    LinearLayout lnrCamera;
 
     private OnFragmentInventoryItemListener onFragmentInventoryItemListener;
-
     private Item item;
 
     public interface OnFragmentInventoryItemListener{
@@ -62,7 +70,7 @@ public class InventoryItemFragment extends Fragment{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d(TAG,"onAttach");
+        Log.d(TAG, "onAttach");
         if(context instanceof OnFragmentInventoryItemListener){
             Log.d(TAG,"onFragmentPOSCartListener");
             onFragmentInventoryItemListener = (OnFragmentInventoryItemListener) context;
@@ -92,6 +100,14 @@ public class InventoryItemFragment extends Fragment{
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+
+    }
+
     @OnClick(R.id.save)
     public void save(){
 
@@ -118,6 +134,32 @@ public class InventoryItemFragment extends Fragment{
             state = ADD;
 
         onFragmentInventoryItemListener.onSaveItem(new Item(0, name.getText().toString(), prc, tag.getText().toString(), stck, 0, "", new Date(System.currentTimeMillis())), state);
+    }
+
+    @OnClick(R.id.lnrCamera)
+    public void lnrCamera(){
+
+        Log.d(TAG, "CAMERA");
+
+        CameraUtility cameraUtility = new CameraUtility(getActivity());
+
+        if (cameraUtility.checkCameraAvailability()){
+
+
+            Fragment fragment = new CameraFragment();
+            if (fragment != null) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main, fragment, CameraFragment.class.getSimpleName());
+                fragmentTransaction.addToBackStack(InventoryItemFragment.class.getSimpleName());
+                fragmentTransaction.commit();
+            }
+
+        }else {
+            Toast.makeText(getActivity(), "Your device is not supported with a camera device", Toast.LENGTH_LONG).show();
+        }
+
+
     }
 
 }
