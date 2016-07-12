@@ -75,6 +75,7 @@ public class CameraFragment extends Fragment {
 
             try {
                 FileOutputStream fos = new FileOutputStream(imageFile);
+
                 fos.write(data);
                 fos.close();
             } catch (FileNotFoundException e) {

@@ -1,5 +1,6 @@
 package ph.kita.devsquare.com.adapters;
 
+import android.app.Application;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,10 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ph.kita.devsquare.com.KitaApplication;
+import ph.kita.devsquare.com.dummy.ItemDummyDb;
 import ph.kita.devsquare.com.fragment.PosFragment;
+import ph.kita.devsquare.com.kita.MainActivity;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
 
@@ -28,11 +32,12 @@ public class InventoryAdapter extends BaseAdapter{
     private Context mContext;
     private List<Item> items;
     private List<Item> itemFilters = new ArrayList<>();
+
     public InventoryAdapter(Context context)
     {
+        final KitaApplication kitaApplication = ((KitaApplication) ((MainActivity) context).getApplication());
         mContext = context;
-//        this.items = new ArrayList<Item>();
-        this.items = PosFragment.dumyPOSItems;
+        this.items = kitaApplication.getItemDummyDb().getAll();
         this.itemFilters.addAll(items);
     }
 
@@ -40,7 +45,6 @@ public class InventoryAdapter extends BaseAdapter{
     {
         mContext = context;
         this.items = items;
-//        this.items = PosFragment.dumyPOSItems;
     }
 
     @Override

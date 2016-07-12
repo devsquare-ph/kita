@@ -28,7 +28,9 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ph.kita.devsquare.com.KitaApplication;
 import ph.kita.devsquare.com.adapters.InventoryAdapter;
+import ph.kita.devsquare.com.dummy.ItemDummyDb;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
 
@@ -79,8 +81,10 @@ public class InventoryFragment extends Fragment {
         Log.d(TAG,"onCreateView");
         ButterKnife.bind(this, view);
 
+        final KitaApplication kitaApplication = (KitaApplication) getActivity().getApplication();
+        final ItemDummyDb itemDummyDb = kitaApplication.getItemDummyDb();
         //sort item
-        Collections.sort(PosFragment.dumyPOSItems, new Comparator<Item>() {
+        Collections.sort(itemDummyDb.getAll(), new Comparator<Item>() {
             @Override public int compare(Item lhs, Item rhs) {
                 return lhs.getName().compareTo(rhs.getName());
             }
@@ -99,7 +103,7 @@ public class InventoryFragment extends Fragment {
             }
         });
 
-        totalItem.setText("" + PosFragment.dumyPOSItems.size());
+        totalItem.setText("" + itemDummyDb.count());
 
         // Capture Text in EditText
         itemFilter.addTextChangedListener(new TextWatcher() {

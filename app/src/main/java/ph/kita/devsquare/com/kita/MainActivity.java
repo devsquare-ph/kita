@@ -18,11 +18,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ph.kita.devsquare.com.KitaApplication;
+import ph.kita.devsquare.com.dummy.ItemDummyDb;
+import ph.kita.devsquare.com.fragment.DashboardFragment;
 import ph.kita.devsquare.com.fragment.InventoryFragment;
 import ph.kita.devsquare.com.fragment.InventoryItemFragment;
 import ph.kita.devsquare.com.fragment.PosCartFragment;
 import ph.kita.devsquare.com.fragment.PosFragment;
 import ph.kita.devsquare.com.fragment.PosReceiptFragment;
+import ph.kita.devsquare.com.fragment.StatisticFragment;
 import ph.kita.devsquare.com.objects.Item;
 import ph.kita.devsquare.com.utils.Constant;
 
@@ -41,8 +45,8 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragment = new PosFragment();
-            fragmentTransaction.replace(R.id.main, fragment, PosFragment.class.getSimpleName());
+            fragment = new StatisticFragment();
+            fragmentTransaction.replace(R.id.main, fragment, StatisticFragment.class.getSimpleName());
             fragmentTransaction.commit();
         }
 
@@ -50,11 +54,13 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
 
         PrimaryDrawerItem drawerPos = new PrimaryDrawerItem().withName(R.string.drawer_item_pos);
         PrimaryDrawerItem drawerInventory = new PrimaryDrawerItem().withName(R.string.drawer_item_inventory);
+        PrimaryDrawerItem dashboard = new PrimaryDrawerItem().withName(R.string.drawer_item_dashboard);
 
         //create the drawer and remember the `Drawer` result object
         Drawer result = new DrawerBuilder()
                 .withActivity(this)
                 .addDrawerItems(
+                        dashboard,
                         drawerPos,
                         drawerInventory
                 )
@@ -67,7 +73,10 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
                         Fragment fragment = new Fragment();
                         String tagFragment = "";
                         switch (position) {
-
+                            case Constant.STATE_DASHBOARD:
+                                fragment = StatisticFragment.newInstance();
+                                tagFragment = StatisticFragment.class.getSimpleName();
+                                break;
                             case Constant.STATE_POS:
                                 fragment = new PosFragment();
                                 tagFragment = PosFragment.class.getSimpleName();
@@ -167,9 +176,13 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
     @Override
     public void onSaveItem(Item item, int state) {
 
+        final KitaApplication kitaApplication = (KitaApplication) getApplication();
+        final ItemDummyDb itemDummyDb = kitaApplication.getItemDummyDb();
+
         switch (state){
             case InventoryItemFragment.UPDATE:
 
+<<<<<<< HEAD
                 for (int i = 0; i < PosFragment.dumyPOSItems.size(); i++){
 
                     if (PosFragment.dumyPOSItems.get(i).getName().equalsIgnoreCase(item.getName())){
@@ -177,14 +190,22 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
                     }
 
                 }
+=======
+                itemDummyDb.updateItem(item);
+>>>>>>> be58e8fd1cb52e4c53885e6506157ae58a58afef
 
                 Toast.makeText(this, "Product has been updated " , Toast.LENGTH_LONG).show();
 
                 break;
             case InventoryItemFragment.ADD:
 
+<<<<<<< HEAD
                 PosFragment.dumyPOSItems.add(item);
                 Toast.makeText(this,"Product has been added", Toast.LENGTH_SHORT).show();
+=======
+                itemDummyDb.createItem(item);
+                Toast.makeText(this,"itemsize: " + itemDummyDb.count(), Toast.LENGTH_SHORT).show();
+>>>>>>> be58e8fd1cb52e4c53885e6506157ae58a58afef
 
                 break;
         }
