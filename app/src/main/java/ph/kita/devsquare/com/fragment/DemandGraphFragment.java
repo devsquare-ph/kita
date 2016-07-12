@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ph.kita.devsquare.com.dummy.ItemDummyDb;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
 
@@ -83,7 +84,7 @@ public class DemandGraphFragment extends Fragment {
         // add a selection listener
 //        mChart.setOnChartValueSelectedListener(this);
 
-        if(PosFragment.dumyPOSItems.size() > maxItem)
+        if(ItemDummyDb.count() > maxItem)
             next.setEnabled(true);
 
         setData(4, 100);
@@ -115,10 +116,10 @@ public class DemandGraphFragment extends Fragment {
     public void next(Button view){
         Toast.makeText(getActivity(), "next: " + lastIndex, Toast.LENGTH_SHORT).show();
 
-        if(lastIndex < PosFragment.dumyPOSItems.size())
+        if(lastIndex < ItemDummyDb.count())
             setData(4, 100);
 
-        if((PosFragment.dumyPOSItems.size() - lastIndex) < maxItem)
+        if((ItemDummyDb.count() - lastIndex) < maxItem)
             view.setEnabled(false);
 
 //        if(lastIndex < (PosFragment.dumyPOSItems.size() - 1))
@@ -179,10 +180,10 @@ public class DemandGraphFragment extends Fragment {
         // xIndex (even if from different DataSets), since no values can be
         // drawn above each other.
         counts = 0;
-        for (; lastIndex < PosFragment.dumyPOSItems.size(); lastIndex++) {
+        for (; lastIndex < ItemDummyDb.count(); lastIndex++) {
 
             yVals1.add(new Entry((float) (Math.random() * mult) + mult / 5, counts));
-            xVals.add(PosFragment.dumyPOSItems.get(lastIndex).getName());
+            xVals.add(ItemDummyDb.getAll().get(lastIndex).getName());
             counts++;
             //break max item display
             if(counts > (maxItem - 1)) {

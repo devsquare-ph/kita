@@ -29,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ph.kita.devsquare.com.adapters.InventoryAdapter;
+import ph.kita.devsquare.com.dummy.ItemDummyDb;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
 
@@ -80,7 +81,7 @@ public class InventoryFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         //sort item
-        Collections.sort(PosFragment.dumyPOSItems, new Comparator<Item>() {
+        Collections.sort(ItemDummyDb.getAll(), new Comparator<Item>() {
             @Override public int compare(Item lhs, Item rhs) {
                 return lhs.getName().compareTo(rhs.getName());
             }
@@ -99,7 +100,7 @@ public class InventoryFragment extends Fragment {
             }
         });
 
-        totalItem.setText("" + PosFragment.dumyPOSItems.size());
+        totalItem.setText("" + ItemDummyDb.count());
 
         // Capture Text in EditText
         itemFilter.addTextChangedListener(new TextWatcher() {

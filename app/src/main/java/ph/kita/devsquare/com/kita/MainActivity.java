@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ph.kita.devsquare.com.dummy.ItemDummyDb;
 import ph.kita.devsquare.com.fragment.DashboardFragment;
 import ph.kita.devsquare.com.fragment.InventoryFragment;
 import ph.kita.devsquare.com.fragment.InventoryItemFragment;
@@ -177,22 +178,15 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
         switch (state){
             case InventoryItemFragment.UPDATE:
 
-                for (int i = 0; i < PosFragment.dumyPOSItems.size(); i++){
-
-                    if (PosFragment.dumyPOSItems.get(i).getName().equalsIgnoreCase(item.getName())){
-
-                        PosFragment.dumyPOSItems.set(i,item);
-                    }
-
-                }
+                ItemDummyDb.updateItem(item);
 
                 Toast.makeText(this, "Product has been updated " , Toast.LENGTH_LONG).show();
 
                 break;
             case InventoryItemFragment.ADD:
 
-                PosFragment.dumyPOSItems.add(item);
-                Toast.makeText(this,"itemsize: " + PosFragment.dumyPOSItems.size(), Toast.LENGTH_SHORT).show();
+                ItemDummyDb.createItem(item);
+                Toast.makeText(this,"itemsize: " + ItemDummyDb.count(), Toast.LENGTH_SHORT).show();
 
                 break;
         }

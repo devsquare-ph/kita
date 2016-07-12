@@ -29,6 +29,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import ph.kita.devsquare.com.custom.MyYAxisValueFormatter;
+import ph.kita.devsquare.com.dummy.ItemDummyDb;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
 
@@ -75,7 +76,7 @@ public class SalesGraphFragment extends Fragment {
         List<String> list = new ArrayList<String>();
         list.add("All Products");
 
-        for(Item i : PosFragment.dumyPOSItems)
+        for(Item i : ItemDummyDb.getAll())
                 list.add(i.getName());
 
         //create an ArrayAdaptar from the String Array
