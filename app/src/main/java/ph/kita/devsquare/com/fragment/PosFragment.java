@@ -28,6 +28,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ph.kita.devsquare.com.adapters.PosAdapter;
 import ph.kita.devsquare.com.adapters.PosItemAutoCompleteAdapter;
+import ph.kita.devsquare.com.dummy.ItemDummyDb;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
 import ph.kita.devsquare.com.utils.Utility;
@@ -40,9 +41,7 @@ import static ph.kita.devsquare.com.adapters.PosAdapter.*;
 public class PosFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     private static final String TAG = PosFragment.class.getSimpleName();
-    public static List<Item> dumyPOSItems = new ArrayList<Item>(Arrays.asList(new Item(0,"vaseline", 1, "shampoo", 2, 1, "apple.png",null),
-            new Item(0,"safeguard", 1, "soap", 2, 1, "apple.png",null),
-            new Item(0,"silka", 1, "soap", 2, 1, null,null)));
+
 
     @BindView(R.id.itemAutoComplete)
     AutoCompleteTextView itemAutoComplete;
@@ -130,7 +129,7 @@ public class PosFragment extends Fragment implements AdapterView.OnItemClickList
         Log.d(TAG,"onCreateView");
         ButterKnife.bind(this, view);
 
-        itemAutoComplete.setAdapter(new PosItemAutoCompleteAdapter(getActivity(), dumyPOSItems));
+        itemAutoComplete.setAdapter(new PosItemAutoCompleteAdapter(getActivity(), ItemDummyDb.getAll()));
         itemAutoComplete.setOnItemClickListener(this);
         itemAutoComplete.setOnTouchListener(new View.OnTouchListener() {
             @Override

@@ -13,6 +13,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ph.kita.devsquare.com.dummy.ItemDummyDb;
 import ph.kita.devsquare.com.fragment.PosFragment;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
@@ -28,11 +29,11 @@ public class InventoryAdapter extends BaseAdapter{
     private Context mContext;
     private List<Item> items;
     private List<Item> itemFilters = new ArrayList<>();
+
     public InventoryAdapter(Context context)
     {
         mContext = context;
-//        this.items = new ArrayList<Item>();
-        this.items = PosFragment.dumyPOSItems;
+        this.items = ItemDummyDb.getAll();
         this.itemFilters.addAll(items);
     }
 
@@ -40,7 +41,6 @@ public class InventoryAdapter extends BaseAdapter{
     {
         mContext = context;
         this.items = items;
-//        this.items = PosFragment.dumyPOSItems;
     }
 
     @Override
