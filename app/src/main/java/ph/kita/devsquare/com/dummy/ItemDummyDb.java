@@ -1,5 +1,7 @@
 package ph.kita.devsquare.com.dummy;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,11 +12,12 @@ import ph.kita.devsquare.com.objects.Item;
  * Created by Alex on 12/07/2016.
  */
 public class ItemDummyDb {
+    private static final String TAG = ItemDummyDb.class.getName();
 
-    private static int index = 0;
-    private static List<Item> items = new ArrayList<>();
+    private int index = 0;
+    private List<Item> items = new ArrayList<>();
 
-    {
+    public ItemDummyDb() {
         List<Item> dumyPOSItems = new ArrayList<Item>(Arrays.asList(new Item(index++,"vaseline", 1, "shampoo", 2, 1, "apple.png",null),
                 new Item(index++,"safeguard", 1, "soap", 2, 1, "apple.png",null),
                 new Item(index++,"silka", 1, "soap", 2, 1, null,null)));
@@ -22,22 +25,25 @@ public class ItemDummyDb {
         items.addAll(dumyPOSItems);
     }
 
-    public static int count() {
+
+    public int count() {
+        Log.d(TAG, "count: " + items.size());
         return items.size();
     }
 
-    public static List<Item> getAll() {
+    public List<Item> getAll() {
         List<Item> copyItems = new ArrayList<>();
         for (Item item : items) {
             copyItems.add(new Item(item));
         }
-
+        Log.d(TAG, "getAll: " + copyItems.toString());
         return copyItems;
     }
 
-    public static Item getItemById(int id) {
+    public Item getItemById(int id) {
         for (Item item : items) {
             if (id == item.getId()) {
+                Log.d(TAG, "getItemById: " + item.toString());
                 return new Item(item);
             }
         }
@@ -45,14 +51,15 @@ public class ItemDummyDb {
         return null;
     }
 
-    public static int createItem(Item item) {
+    public int createItem(Item item) {
         index++;
         item.setId(index);
         items.add(item);
+        Log.d(TAG, "createItem: " + item.toString());
         return index;
     }
 
-    public static void updateItem(Item item) {
+    public void updateItem(Item item) {
         for (Item dbItem : items) {
             if (item.getId() == dbItem.getId()) {
                 dbItem.setName(item.getName());
@@ -60,13 +67,14 @@ public class ItemDummyDb {
                 dbItem.setQualitytNWeight(item.getQualitytNWeight());
                 dbItem.setStock(item.getStock());
                 dbItem.setTag(item.getTag());
-
+                Log.d(TAG, "updateItem: " + dbItem.toString());
                 break;
             }
         }
     }
 
-    public static void removeItem(Item item) {
+    public void removeItem(Item item) {
+        Log.d(TAG, "removeItem: " + item.toString());
         items.remove(item);
     }
 }

@@ -187,4 +187,18 @@ public class Item implements Parcelable{
         result = 31 * result + (dateCreated != null ? dateCreated.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", tag='" + tag + '\'' +
+                ", stock=" + stock +
+                ", qualitytNWeight=" + qualitytNWeight +
+                ", imageURL='" + imageURL + '\'' +
+                ", dateCreated=" + dateCreated +
+                '}';
+    }
 }

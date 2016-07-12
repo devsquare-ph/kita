@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import ph.kita.devsquare.com.KitaApplication;
 import ph.kita.devsquare.com.custom.MyYAxisValueFormatter;
 import ph.kita.devsquare.com.dummy.ItemDummyDb;
 import ph.kita.devsquare.com.kita.R;
@@ -76,7 +77,10 @@ public class SalesGraphFragment extends Fragment {
         List<String> list = new ArrayList<String>();
         list.add("All Products");
 
-        for(Item i : ItemDummyDb.getAll())
+        final KitaApplication kitaApplication = (KitaApplication) getActivity().getApplication();
+        final ItemDummyDb itemDummyDb = kitaApplication.getItemDummyDb();
+
+        for(Item i : itemDummyDb.getAll())
                 list.add(i.getName());
 
         //create an ArrayAdaptar from the String Array

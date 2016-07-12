@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ph.kita.devsquare.com.KitaApplication;
 import ph.kita.devsquare.com.dummy.ItemDummyDb;
 import ph.kita.devsquare.com.fragment.DashboardFragment;
 import ph.kita.devsquare.com.fragment.InventoryFragment;
@@ -175,18 +176,21 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
     @Override
     public void onSaveItem(Item item, int state) {
 
+        final KitaApplication kitaApplication = (KitaApplication) getApplication();
+        final ItemDummyDb itemDummyDb = kitaApplication.getItemDummyDb();
+
         switch (state){
             case InventoryItemFragment.UPDATE:
 
-                ItemDummyDb.updateItem(item);
+                itemDummyDb.updateItem(item);
 
                 Toast.makeText(this, "Product has been updated " , Toast.LENGTH_LONG).show();
 
                 break;
             case InventoryItemFragment.ADD:
 
-                ItemDummyDb.createItem(item);
-                Toast.makeText(this,"itemsize: " + ItemDummyDb.count(), Toast.LENGTH_SHORT).show();
+                itemDummyDb.createItem(item);
+                Toast.makeText(this,"itemsize: " + itemDummyDb.count(), Toast.LENGTH_SHORT).show();
 
                 break;
         }

@@ -28,7 +28,9 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ph.kita.devsquare.com.KitaApplication;
 import ph.kita.devsquare.com.dummy.ItemDummyDb;
+import ph.kita.devsquare.com.kita.MainActivity;
 import ph.kita.devsquare.com.kita.R;
 import ph.kita.devsquare.com.objects.Item;
 
@@ -56,6 +58,7 @@ public class DemandGraphFragment extends Fragment {
     private int lastIndex = 0;
     private int maxItem = 2;
     private int counts = 0;
+    private ItemDummyDb dummyItemDb;
 
     public static Fragment newInstance(){
         return new DemandGraphFragment();
@@ -65,7 +68,8 @@ public class DemandGraphFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.d(TAG,"onAttach");
-
+        final KitaApplication kitaApplication = ((KitaApplication) ((MainActivity) context).getApplication());
+        this.dummyItemDb = kitaApplication.getItemDummyDb();
     }
 
     @Nullable
@@ -84,7 +88,7 @@ public class DemandGraphFragment extends Fragment {
         // add a selection listener
 //        mChart.setOnChartValueSelectedListener(this);
 
-        if(ItemDummyDb.count() > maxItem)
+        if(dummyItemDb.count() > maxItem)
             next.setEnabled(true);
 
         setData(4, 100);
@@ -116,10 +120,10 @@ public class DemandGraphFragment extends Fragment {
     public void next(Button view){
         Toast.makeText(getActivity(), "next: " + lastIndex, Toast.LENGTH_SHORT).show();
 
-        if(lastIndex < ItemDummyDb.count())
+        if(lastIndex < dummyItemDb.count())
             setData(4, 100);
 
-        if((ItemDummyDb.count() - lastIndex) < maxItem)
+        if((dummyItemDb.count() - lastIndex) < maxItem)
             view.setEnabled(false);
 
 //        if(lastIndex < (PosFragment.dumyPOSItems.size() - 1))
@@ -180,10 +184,10 @@ public class DemandGraphFragment extends Fragment {
         // xIndex (even if from different DataSets), since no values can be
         // drawn above each other.
         counts = 0;
-        for (; lastIndex < ItemDummyDb.count(); lastIndex++) {
+        for (; lastIndex < dummyItemDb.count(); lastIndex++) {
 
             yVals1.add(new Entry((float) (Math.random() * mult) + mult / 5, counts));
-            xVals.add(ItemDummyDb.getAll().get(lastIndex).getName());
+            xVals.add(dummyItemDb.getAll().get(lastIndex).getName());
             counts++;
             //break max item display
             if(counts > (maxItem - 1)) {
