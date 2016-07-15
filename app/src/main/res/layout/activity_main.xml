@@ -5,9 +5,19 @@
     android:layout_height="match_parent"
     tools:context="ph.kita.devsquare.com.kita.MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/MaterialDrawerTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        android:transitionName="actionBar" />
 
     <FrameLayout
         android:id="@+id/main"
+        android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

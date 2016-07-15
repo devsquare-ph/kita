@@ -5,6 +5,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -30,7 +32,7 @@ import ph.kita.devsquare.com.fragment.StatisticFragment;
 import ph.kita.devsquare.com.objects.Item;
 import ph.kita.devsquare.com.utils.Constant;
 
-public class MainActivity extends FragmentActivity implements PosFragment.OnFragmentPOSListener, PosCartFragment.OnFragmentPOSCartListener, InventoryFragment.OnFragmentInventoryListener, InventoryItemFragment.OnFragmentInventoryItemListener, PosReceiptFragment.OnFragmentReceiptListener {
+public class MainActivity extends AppCompatActivity implements PosFragment.OnFragmentPOSListener, PosCartFragment.OnFragmentPOSCartListener, InventoryFragment.OnFragmentInventoryListener, InventoryItemFragment.OnFragmentInventoryItemListener, PosReceiptFragment.OnFragmentReceiptListener {
 
     private String TAG = getClass().getSimpleName();
 
@@ -38,8 +40,16 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         Log.d(TAG,"onCreate MainACtivtiy");
         Log.d(TAG,"onCreate getFileDir: " + getFilesDir());
+
          /*Set the Home Fragment*/
         Fragment fragment = new Fragment();
         if (fragment != null) {
@@ -59,6 +69,7 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
         //create the drawer and remember the `Drawer` result object
         Drawer result = new DrawerBuilder()
                 .withActivity(this)
+                .withToolbar(toolbar)
                 .addDrawerItems(
                         dashboard,
                         drawerPos,
@@ -182,30 +193,15 @@ public class MainActivity extends FragmentActivity implements PosFragment.OnFrag
         switch (state){
             case InventoryItemFragment.UPDATE:
 
-<<<<<<< HEAD
-                for (int i = 0; i < PosFragment.dumyPOSItems.size(); i++){
-
-                    if (PosFragment.dumyPOSItems.get(i).getName().equalsIgnoreCase(item.getName())){
-                        PosFragment.dumyPOSItems.set(i,item);
-                    }
-
-                }
-=======
                 itemDummyDb.updateItem(item);
->>>>>>> be58e8fd1cb52e4c53885e6506157ae58a58afef
 
                 Toast.makeText(this, "Product has been updated " , Toast.LENGTH_LONG).show();
 
                 break;
             case InventoryItemFragment.ADD:
 
-<<<<<<< HEAD
-                PosFragment.dumyPOSItems.add(item);
-                Toast.makeText(this,"Product has been added", Toast.LENGTH_SHORT).show();
-=======
                 itemDummyDb.createItem(item);
                 Toast.makeText(this,"itemsize: " + itemDummyDb.count(), Toast.LENGTH_SHORT).show();
->>>>>>> be58e8fd1cb52e4c53885e6506157ae58a58afef
 
                 break;
         }
